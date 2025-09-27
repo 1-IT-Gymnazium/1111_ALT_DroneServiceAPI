@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35514.174
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneService.Api", "DroneService.Api\DroneService.Api.csproj", "{729E0783-3197-4658-A695-1D5AEAD68CEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneService.Data", "DroneService.Data\DroneService.Data.csproj", "{F88DEB15-DF62-4ED6-A840-9C98D1B74079}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneService.Application", "DroneService.Application\DroneService.Application.csproj", "{F4925ED9-6812-48B7-8099-CE9CFE4CACCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneService.Utilities", "DroneService.Utilities\DroneService.Utilities.csproj", "{7683DE8D-49DE-4561-9ABD-42AF123EFC3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneService.Application.Contracts", "DroneService.Application.Contracts\DroneService.Application.Contracts.csproj", "{0A309350-7528-4AD6-A51C-FCDB3E148794}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F88DEB15-DF62-4ED6-A840-9C98D1B74079} = {F88DEB15-DF62-4ED6-A840-9C98D1B74079}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{729E0783-3197-4658-A695-1D5AEAD68CEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{729E0783-3197-4658-A695-1D5AEAD68CEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{729E0783-3197-4658-A695-1D5AEAD68CEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{729E0783-3197-4658-A695-1D5AEAD68CEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F88DEB15-DF62-4ED6-A840-9C98D1B74079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F88DEB15-DF62-4ED6-A840-9C98D1B74079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F88DEB15-DF62-4ED6-A840-9C98D1B74079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F88DEB15-DF62-4ED6-A840-9C98D1B74079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4925ED9-6812-48B7-8099-CE9CFE4CACCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4925ED9-6812-48B7-8099-CE9CFE4CACCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4925ED9-6812-48B7-8099-CE9CFE4CACCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4925ED9-6812-48B7-8099-CE9CFE4CACCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7683DE8D-49DE-4561-9ABD-42AF123EFC3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7683DE8D-49DE-4561-9ABD-42AF123EFC3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7683DE8D-49DE-4561-9ABD-42AF123EFC3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7683DE8D-49DE-4561-9ABD-42AF123EFC3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A309350-7528-4AD6-A51C-FCDB3E148794}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A309350-7528-4AD6-A51C-FCDB3E148794}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A309350-7528-4AD6-A51C-FCDB3E148794}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A309350-7528-4AD6-A51C-FCDB3E148794}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E925FADD-CD5B-4EE4-959A-F5F89F0C91AC}
+	EndGlobalSection
+EndGlobal

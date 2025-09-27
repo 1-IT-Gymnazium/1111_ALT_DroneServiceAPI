@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MailKit" Version="4.13.0" />
+		<PackageReference Include="MediatR" Version="13.0.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="NodaTime" Version="3.2.2" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="9.0.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DroneService.Data\DroneService.Data.csproj" />
+	  <ProjectReference Include="..\DroneService.Utilities\DroneService.Utilities.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Subscription\" />
+	</ItemGroup>
+
+</Project>

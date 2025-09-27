@@ -1,0 +1,6 @@
+services:
+  droneservice.api:
+    image: ${DOCKER_REGISTRY-}droneserviceapi
+    build:
+      context: .
+      dockerfile: DroneService.Api\Dockerfile
