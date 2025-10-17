@@ -9,7 +9,6 @@ public class AppUser : IdentityUser<Guid>, ITrackable
 {
     public string DisplayName { get; set; } = null!;
     public string? AgencyName { get; set; }
-    public string? ArcGisId { get; set; }
     public ICollection<Field> Fields { get; set; } = [];
     public string? AgencyAddress { get; set; } 
     public string? ContactPerson { get; set; }

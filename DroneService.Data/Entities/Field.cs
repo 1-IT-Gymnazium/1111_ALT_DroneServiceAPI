@@ -16,7 +16,7 @@ public class Field : ITrackable
     public double Area { get; set; } 
     [MaxLength(Metadata.ContentLenght)]
     public string? CurrentCrops { get; set; }
-    public int AtticBlock { get; set; }
+    public string AtticBlock { get; set; } = null!;
     public string BlockType { get; set; } = null!;
     public string Municipality { get; set; } = null!;
 

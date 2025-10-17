@@ -69,13 +69,13 @@ namespace DroneService.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Area")
-                        .IsRequired()
+                    b.Property<double>("Area")
                         .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("AtticBlock")
-                        .HasColumnType("integer");
+                    b.Property<string>("AtticBlock")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid");
@@ -93,7 +93,6 @@ namespace DroneService.Data.Migrations
                         .HasColumnType("character varying(200)");
 
                     b.Property<string>("CurrentCrops")
-                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
@@ -118,7 +117,6 @@ namespace DroneService.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 

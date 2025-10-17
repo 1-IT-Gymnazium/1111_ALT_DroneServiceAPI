@@ -55,7 +55,6 @@ if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var us
 
         user.AgencyName = request.AgencyName;
         user.ContactPerson = request.ContactPerson;
-        user.ArcGisId = request.ArcGisId;
         user.AgencyAddress = request.AgencyAddress;
         user.Ico = request.Ico;
         user.SetModifyBy("System", _clock.GetCurrentInstant());
@@ -83,9 +82,6 @@ if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var us
         await _dbContext.ServiceGoals.AddRangeAsync(toAdd, cancellationToken);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
-
-        
-        await _fieldService.ImportFieldsFromLpisAsync(user, user.ArcGisId!);
         
 
         var updatedUser = await _userManager.Users

@@ -26,11 +26,7 @@ public class UpdateFieldHandler : IRequestHandler<UpdateFieldCommand, DetailFiel
         if (dbEntity == null) return null;
 
         dbEntity.Name = request.Name;
-        dbEntity.Area = request.Area;
         dbEntity.CurrentCrops = request.CurrentCrops;
-        dbEntity.AtticBlock = request.AtticBlock;
-        dbEntity.BlockType = request.BlockType;
-        dbEntity.Municipality = request.Municipality;
         dbEntity.SetModifyBy("System", _clock.GetCurrentInstant());
 
         await _dbContext.SaveChangesAsync();

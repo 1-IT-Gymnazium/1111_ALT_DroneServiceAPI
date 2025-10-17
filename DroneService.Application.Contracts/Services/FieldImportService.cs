@@ -23,6 +23,7 @@ public class FieldImportService : IFieldImportService
 
     public async Task ImportFieldsFromLpisAsync(AppUser user, string arcGisId)
     {
+
         var fields = await FetchFieldsFromArcGis(arcGisId);
         var now = _clock.GetCurrentInstant();
 
@@ -60,7 +61,7 @@ public class FieldImportService : IFieldImportService
         return result.Features.Select(f => new FieldDto
         {
             Area = f.Attributes.VYMERA ?? 0,
-            AtticBlock = f.Attributes.ZKOD_DPB ?? 0,
+            AtticBlock = f.Attributes.ZKOD_DPB,
             BlockType = f.Attributes.KULTURANAZ,
             Municipality = f.Attributes.PRISL_OPZL,
 

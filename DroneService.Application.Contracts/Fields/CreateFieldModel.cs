@@ -11,7 +11,7 @@ public class CreateFieldModel
     public double Area { get; set; }
     public string CurrentCrops { get; set; } = null!;
     public int ArcGisId { get; set; }
-    public int AtticBlock { get; set; }
+    public string AtticBlock { get; set; } = null!;
     public string BlockType { get; set; } = null!;
     public string Municipality { get; set; } = null!;
 }

@@ -19,7 +19,7 @@ public class ArcGisFeature
 public class ArcGisAttributes
 {
     public double? VYMERA { get; set; }
-    public int? ZKOD_DPB { get; set; }
+    public string? ZKOD_DPB { get; set; }
     public string? KULTURANAZ { get; set; }
     public string? PRISL_OPZL { get; set; }
 }

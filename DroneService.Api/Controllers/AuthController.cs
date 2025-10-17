@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace DroneService.Api.Controllers;
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -64,7 +64,7 @@ public class AuthController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost("api/v1/Auth/Refresh")]
+    [HttpPost("Refresh")]
     public async Task<IActionResult> RefreshToken()
     {
         if (!Request.Cookies.TryGetValue("RefreshToken", out var refreshToken))

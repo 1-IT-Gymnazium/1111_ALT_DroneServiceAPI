@@ -8,7 +8,7 @@ public class CreateFieldCommand : IRequest<DetailFieldModel>
     public string Name { get; set; }
     public double Area { get; set; }
     public string CurrentCrops { get; set; }
-    public int AtticBlock { get; set; }
+    public string AtticBlock { get; set; }
     public string BlockType { get; set; } = null!;
     public string Municipality { get; set; } = null!;
     public AppUser Author { get; set; }

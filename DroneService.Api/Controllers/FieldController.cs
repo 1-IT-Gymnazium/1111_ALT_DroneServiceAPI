@@ -68,5 +68,17 @@ public class FieldController(IMediator mediator) : ControllerBase
         var success = (bool)await _mediator.Send(request: new DeleteFieldCommand(id));
         return success ? NoContent() : NotFound();
     }
+    [Authorize]
+    [HttpGet("my-fields")]
+    public async Task<IActionResult> GetMyFields()
+    {
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+            return Unauthorized();
+
+        var result = await _mediator.Send(new GetUserFieldsQuery(userId));
+        return Ok(result);
+    }
 }
 

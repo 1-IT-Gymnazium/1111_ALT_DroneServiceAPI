@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DroneService.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250923191518_LpisId")]
-    partial class LpisId
+    [Migration("20251002081918_name")]
+    partial class name
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,13 +72,13 @@ namespace DroneService.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Area")
-                        .IsRequired()
+                    b.Property<double>("Area")
                         .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("AtticBlock")
-                        .HasColumnType("integer");
+                    b.Property<string>("AtticBlock")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid");
@@ -96,7 +96,6 @@ namespace DroneService.Data.Migrations
                         .HasColumnType("character varying(200)");
 
                     b.Property<string>("CurrentCrops")
-                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
@@ -121,7 +120,6 @@ namespace DroneService.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -147,8 +145,8 @@ namespace DroneService.Data.Migrations
                     b.Property<string>("AgencyName")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("ArcGisId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ArcGisId")
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("text");
