@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace DroneService.Api.Controllers;
 
 [ApiController]
-[Route("api/field")]
+[Route("api/[controller]")]
 public class FieldController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;

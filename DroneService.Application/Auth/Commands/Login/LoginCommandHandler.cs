@@ -1,5 +1,4 @@
 ﻿using DroneService.Application.Contracts.Auth;
-using DroneService.Application.Contracts.Interfaces;
 using DroneService.Application.Contracts.Services;
 using DroneService.Data.Entities.Identity;
 using DroneService.Utilities.Options;
@@ -32,8 +31,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
     public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var normalizedEmail = request.Email.ToUpperInvariant();
-        var user = await _userManager.Users.SingleOrDefaultAsync(x =>
-            x.EmailConfirmed && x.NormalizedUserName == normalizedEmail);
+        var user = await _userManager.Users
+    .Include(u => u.ServiceGoals)
+    .SingleOrDefaultAsync(x =>
+        x.EmailConfirmed && x.NormalizedUserName == normalizedEmail);
+
 
         if (user == null)
             throw new Exception("LOGIN_FAILED");
@@ -56,10 +58,17 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
             "",
             claims);
 
+        var requiresProfileCompletion = string.IsNullOrWhiteSpace(user.AgencyName)
+    || string.IsNullOrWhiteSpace(user.ContactPerson)
+    || string.IsNullOrWhiteSpace(user.AgencyAddress)
+    || string.IsNullOrWhiteSpace(user.Ico)
+    || user.ServiceGoals == null || !user.ServiceGoals.Any();
+
         return new LoginResponse
         {
             AccessToken = accessToken,
-            RefreshToken = refreshToken
+            RefreshToken = refreshToken,
+            RequiresProfileCompletion = requiresProfileCompletion
         };
     }
 }

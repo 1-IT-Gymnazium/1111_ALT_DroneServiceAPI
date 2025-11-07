@@ -1,12 +1,10 @@
-﻿using MediatR;
+﻿using DroneService.Application.Contracts.Reservations;
+using MediatR;
 
 namespace DroneService.Application.Reservations.Commands;
 
-public class CreateReservationCommand : IRequest<Guid>
+public class CreateReservationCommand : IRequest<DetailReservationModel>
 {
-    public Guid UserId { get; set; } 
-    public DateTime Date { get; set; }
-    public string Location { get; set; } = null!;
-    public string ServiceType { get; set; } = null!;
-    public string Note { get; set; } = null!;
+    public List<Guid> FieldIds { get; set; } = new();
+    public DateTime ScheduledAt { get; set; }
 }

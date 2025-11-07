@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace DroneService.Api.Controllers;
 [ApiController]
-[Route("api/auth")]
+[Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -31,7 +31,7 @@ public class AuthController : ControllerBase
         var token = await _mediator.Send(command);
         return Ok(new { token });
     }
-
+    [Authorize]
     [HttpPut("form")]
     public async Task<ActionResult<DetailUserModel>> UpdateForm([FromBody] FormCommand command, CancellationToken ct)
     {
@@ -79,7 +79,6 @@ public class AuthController : ControllerBase
 
         return Ok(result);
     }
-
 
 
     [HttpGet("me")]

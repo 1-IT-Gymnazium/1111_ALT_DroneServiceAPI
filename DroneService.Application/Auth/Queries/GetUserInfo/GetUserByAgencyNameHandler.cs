@@ -26,7 +26,8 @@ public class GetUserByAgencyNameHandler : IRequestHandler<GetUserByAgencyName, U
             {
                 UserName = u.UserName,
                 Email = u.Email,
-                AgencyName = u.AgencyName
+                AgencyName = u.AgencyName,
+                AgencyAddress = u.AgencyAddress,
             })
             .FirstOrDefaultAsync(cancellationToken);
 

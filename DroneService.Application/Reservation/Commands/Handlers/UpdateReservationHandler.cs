@@ -27,7 +27,6 @@ public class UpdateReservationHandler : IRequestHandler<UpdateReservationCommand
         if (dbEntity == null) return null;
 
         dbEntity.ScheduledAt = request.ScheduledAt;
-        dbEntity.Location = request.Location;
         dbEntity.ServiceType = request.ServiceType;
         dbEntity.SetModifyBy("System", _clock.GetCurrentInstant());
         await _dbContext.SaveChangesAsync();

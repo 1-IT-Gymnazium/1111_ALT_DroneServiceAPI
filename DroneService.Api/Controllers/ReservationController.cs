@@ -1,11 +1,12 @@
 ﻿using DroneService.Application.Reservations.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DroneService.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/[controller]")]
 public class ReservationsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -14,14 +15,14 @@ public class ReservationsController : ControllerBase
     {
         _mediator = mediator;
     }
-
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateReservation([FromBody] CreateReservationCommand command)
     {
         var reservationId = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetReservation), new { id = reservationId }, reservationId);
     }
-
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetReservation(Guid id)
     {

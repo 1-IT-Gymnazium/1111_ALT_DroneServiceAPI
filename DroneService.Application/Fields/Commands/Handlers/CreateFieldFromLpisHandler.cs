@@ -5,6 +5,7 @@ using DroneService.Data.Entities;
 using DroneService.Data.Interfaces;
 using MediatR;
 using NodaTime;
+using Microsoft.EntityFrameworkCore;
 
 namespace DroneService.Application.Fields.Commands.Handlers;
 
@@ -29,7 +30,6 @@ public class CreateFieldFromLpisHandler : IRequestHandler<CreateFieldFromLpisCom
 
     public async Task<DetailFieldModel> Handle(CreateFieldFromLpisCommand request, CancellationToken cancellationToken)
     {
-        // 1. Načti data z ArcGIS API
         Instant now = _clock.GetCurrentInstant();
         var fieldsFromLpis = await _arcGisService.GetFieldsByLpisIdAsync(request.LpisId);
 
@@ -38,30 +38,32 @@ public class CreateFieldFromLpisHandler : IRequestHandler<CreateFieldFromLpisCom
             throw new InvalidOperationException($"Žádné pole pro LPIS_ID {request.LpisId} nenalezeno.");
         }
 
+        int existingCount = await _dbContext.Fields
+            .CountAsync(f => f.AuthorId == request.AuthorId, cancellationToken);
+
         DetailFieldModel? lastCreated = null;
 
-        // 2. Pro každý FieldDto vytvoř entitu a ulož
+        int index = 1;
         foreach (var dto in fieldsFromLpis)
         {
             var entity = new Field
             {
                 Id = Guid.NewGuid(),
-                Name = "Nové pole", // uživatel si upraví
-                CurrentCrops = string.Empty, // zatím prázdné
+                Name = $"Pole {existingCount + index}",
+                CurrentCrops = string.Empty,
                 Area = dto.Area,
                 AtticBlock = dto.AtticBlock,
                 BlockType = dto.BlockType,
                 Municipality = dto.Municipality,
                 AuthorId = request.AuthorId,
-            }.SetCreateBySystem(now); // ⬅️ tohle doplní CreatedAt/By + ModifiedAt/By
+            }.SetCreateBySystem(now);
 
             _dbContext.Fields.Add(entity);
 
-            lastCreated = _mapper.ToDetailField(entity); // můžeš použít mapper, ať se držíš konzistence
+            lastCreated = _mapper.ToDetailField(entity);
+            index++;
         }
 
-
-        // 3. Ulož vše do DB
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return lastCreated!;

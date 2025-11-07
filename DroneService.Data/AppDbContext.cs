@@ -14,7 +14,7 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     public DbSet<Reservation> Reservations { get; set; }
     public DbSet<ServiceGoal> ServiceGoals { get; set; }
     public DbSet<AppUser> AppUsers { get; set; }
-    public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<ServiceType> ServiceType { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

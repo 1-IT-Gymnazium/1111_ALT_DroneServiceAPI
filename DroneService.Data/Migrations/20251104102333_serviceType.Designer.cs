@@ -3,6 +3,7 @@ using System;
 using DroneService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DroneService.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251104102333_serviceType")]
+    partial class serviceType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,14 +123,9 @@ namespace DroneService.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<Guid?>("ReservationId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("ReservationId");
 
                     b.ToTable("Field");
                 });
@@ -299,8 +297,9 @@ namespace DroneService.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<bool>("IsSubscription")
-                        .HasColumnType("boolean");
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Instant>("ModifiedAt")
                         .HasMaxLength(200)
@@ -311,8 +310,9 @@ namespace DroneService.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("ScheduledAt")
                         .HasColumnType("timestamp with time zone");
@@ -334,35 +334,8 @@ namespace DroneService.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Instant>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<Instant?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
                     b.Property<bool>("IsSubscription")
                         .HasColumnType("boolean");
-
-                    b.Property<Instant>("ModifiedAt")
-                        .HasMaxLength(200)
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -372,8 +345,6 @@ namespace DroneService.Data.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
 
                     b.ToTable("ServiceType");
                 });
@@ -408,10 +379,6 @@ namespace DroneService.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DroneService.Data.Entities.Reservation", null)
-                        .WithMany("Fields")
-                        .HasForeignKey("ReservationId");
-
                     b.Navigation("Author");
                 });
 
@@ -437,27 +404,11 @@ namespace DroneService.Data.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("DroneService.Data.Entities.ServiceType", b =>
-                {
-                    b.HasOne("DroneService.Data.Entities.Identity.AppUser", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-                });
-
             modelBuilder.Entity("DroneService.Data.Entities.Identity.AppUser", b =>
                 {
                     b.Navigation("Fields");
 
                     b.Navigation("ServiceGoals");
-                });
-
-            modelBuilder.Entity("DroneService.Data.Entities.Reservation", b =>
-                {
-                    b.Navigation("Fields");
                 });
 #pragma warning restore 612, 618
         }

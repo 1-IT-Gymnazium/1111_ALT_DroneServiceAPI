@@ -1,4 +1,4 @@
-using DroneService.Application.Auth.Commands.Login;
+﻿using DroneService.Application.Auth.Commands.Login;
 using DroneService.Application.Contracts.Fields;
 using DroneService.Application.Contracts.Interfaces;
 using DroneService.Application.Contracts.Services;
@@ -25,6 +25,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // 1️ Database
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<AppDbContext>(options =>
         {
@@ -36,11 +37,12 @@ public class Program
 
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-        builder.Services.AddHttpClient<KlarnaService>();
+        // 2️ Core services
         builder.Services.AddTransient<TokenService>();
         builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
         builder.Services.AddScoped<IApplicationMapper, ApplicationMapper>();
 
+        // 3️ Identity
         builder.Services.AddIdentityCore<AppUser>(options =>
         {
             options.SignIn.RequireConfirmedAccount = true;
@@ -55,16 +57,7 @@ public class Program
         .AddSignInManager()
         .AddDefaultTokenProviders();
 
-        builder.Services.Configure<IdentityOptions>(options =>
-        {
-            options.Password.RequireDigit = true;
-            options.Password.RequireLowercase = true;
-            options.Password.RequireNonAlphanumeric = true;
-            options.Password.RequireUppercase = true;
-            options.Password.RequiredLength = 6;
-            options.Password.RequiredUniqueChars = 1;
-        });
-
+        // 4️ JWT
         builder.Services.Configure<JwtSetting>(builder.Configuration.GetSection(nameof(JwtSetting)));
         var jwtSettings = builder.Configuration.GetRequiredSection(nameof(JwtSetting)).Get<JwtSetting>();
 
@@ -86,28 +79,38 @@ public class Program
             };
         });
 
+        // 5️ Options & utility services
         builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("SmtpSettings"));
-        builder.Services.AddScoped<IFieldImportService, FieldImportService>();
         builder.Services.Configure<EnvironmentOptions>(builder.Configuration.GetSection("EnvironmentSettings"));
         builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<EnvironmentOptions>>().Value);
         builder.Services.AddSingleton<IClock>(SystemClock.Instance);
         builder.Services.AddHttpContextAccessor();
-        builder.Services.AddHostedService<EmailSenderBackgroundService>();
-        builder.Services.AddScoped<ArcGisService>();
+        builder.Services.AddScoped<IUserContext, UserContext>();
+        builder.Services.AddScoped<UserContext>();
 
+        // 6️ Background workers
+        builder.Services.AddHostedService<EmailSenderBackgroundService>();
+
+        // 7️ HttpClient & dependent services
+        // DŮLEŽITÉ: Registrace HttpClient, jinak DI selže
+        builder.Services.AddHttpClient<IFieldImportService, FieldImportService>();
+        builder.Services.AddHttpClient<ArcGisService>();
+
+        // 8️ MediatR
         builder.Services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(LoginCommand).Assembly);
-
         });
-        builder.Services.AddControllers();
 
+        // 9️ Authorization
         builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy("AdminOnly", policy =>
                 policy.RequireClaim("role", "Admin"));
         });
 
+        // 10 Controllers & Swagger
+        builder.Services.AddControllers();
         builder.Services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "JWT API", Version = "v1" });
@@ -115,7 +118,7 @@ public class Program
             {
                 Name = "Authorization",
                 Type = SecuritySchemeType.Http,
-                Scheme = "Bearer",
+                Scheme = "bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
                 Description = "Enter your JWT token without the 'Bearer' prefix.\n\nExample: abc123xyz"
@@ -137,6 +140,7 @@ public class Program
             });
         });
 
+        // 11️ CORS
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowFrontend",
@@ -147,6 +151,7 @@ public class Program
                     .AllowCredentials());
         });
 
+        // 12️ Build & Run
         var app = builder.Build();
 
         app.UseCors("AllowFrontend");
@@ -161,6 +166,7 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
+
         app.Run();
     }
 }
