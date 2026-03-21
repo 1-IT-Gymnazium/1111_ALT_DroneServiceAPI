@@ -1,14 +1,18 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DroneService.Application.Contracts.Result;
+using MediatR;
 
 namespace DroneService.Application.Auth.Commands.Register;
 
-public class RegisterCommand : IRequest<string>
+// Command → reprezentuje akci "zaregistruj nového uživatele"
+// IRequest<Result<string>> znamená:
+// → handler vrátí výsledek (success/fail) + string (u tebe confirmation token)
+public class RegisterCommand : IRequest<Result<string>>
 {
+    // DisplayName → ve tvém případě slouží jako email (!)
+    // to je trochu matoucí název
     public string DisplayName { get; set; } = null!;
+
+    // Heslo uživatele
+    // validuje se později v handleru (PasswordValidator)
     public string Password { get; set; } = null!;
 }

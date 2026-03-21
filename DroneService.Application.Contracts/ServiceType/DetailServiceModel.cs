@@ -1,10 +1,4 @@
-﻿using DroneService.Application.Contracts.Fields;
-using DroneService.Application.Contracts.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DroneService.Application.Contracts.Utils;
 
 namespace DroneService.Application.Contracts.ServiceType;
 

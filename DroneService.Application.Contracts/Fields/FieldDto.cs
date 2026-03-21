@@ -6,8 +6,11 @@ public class FieldDto
 {
     public double Area { get; set; }           // VYMERA
     public string AtticBlock { get; set; } = null!;    // ZKOD_DPB
-    public string BlockType { get; set; } = null!;   // KULTURANAZ
-    public string Municipality { get; set; } = null!; // PRISL_OPZL
+    public string BlockType { get; set; } = null!;  // KULTURANAZ
+    public string Municipality { get; set; } = null!;// PRISL_OPZL
+    public int LpisId { get; set; }     // ID_UZ
+    public int FID { get; set; }    //FID
+    public int dDpb { get; set; } //ID_DPB
 }
 
 public class ArcGisService
@@ -37,16 +40,48 @@ public class ArcGisService
         {
             var attrs = feature.GetProperty("attributes");
 
-            // VYMERA
-            var vymElem = attrs.GetProperty("VYMERA");
-            double area = vymElem.ValueKind switch
+            // int, double
+            var vymera = attrs.GetProperty("VYMERA");
+            double area = vymera.ValueKind switch
             {
-                JsonValueKind.Number => vymElem.GetDouble(),
+                JsonValueKind.Number => vymera.GetDouble(),
                 JsonValueKind.String when
-                    double.TryParse(vymElem.GetString(), NumberStyles.Any,
+                    double.TryParse(vymera.GetString(), NumberStyles.Any,
                                     CultureInfo.InvariantCulture, out var d)
                     => d,
                 _ => 0
+            };
+
+            var LpisId = attrs.GetProperty("ID_UZ");
+            int lpis = LpisId.ValueKind switch
+            {
+                JsonValueKind.Number => LpisId.GetInt32(),
+                JsonValueKind.String when 
+                    int.TryParse(LpisId.GetString(), NumberStyles.Any,
+                                CultureInfo.InvariantCulture, out var d)
+                    => d,
+                _ => 0
+            };
+
+            var FID = attrs.GetProperty("FID");
+            int id = FID.ValueKind switch
+            {
+                JsonValueKind.Number => FID.GetInt32(),
+                JsonValueKind.String when
+                    int.TryParse(FID.GetString(), NumberStyles.Any,
+                                CultureInfo.InvariantCulture, out var d)
+                    => d,
+                _ => 0
+            };
+            var dDpb = attrs.GetProperty("ID_DPB");
+            var id_dpb = dDpb.ValueKind switch
+            { JsonValueKind.Number => dDpb.GetInt32(),
+                JsonValueKind.String when
+                    int.TryParse(dDpb.GetString(), NumberStyles.Any,
+                                CultureInfo.InvariantCulture, out var d)
+                    => d,
+                _ => 0
+
             };
 
             // Textové vlastnosti
@@ -59,7 +94,10 @@ public class ArcGisService
                 Area = area,
                 AtticBlock = atticBlock,
                 BlockType = blockType,
-                Municipality = municipality
+                Municipality = municipality, 
+                LpisId = lpis,
+                FID = id,
+                dDpb = id_dpb,
             });
         }
         return results;

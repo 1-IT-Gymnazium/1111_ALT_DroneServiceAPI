@@ -1,4 +1,5 @@
 ﻿using DroneService.Application.Contracts.Auth;
+using DroneService.Application.Contracts.Result;
 using DroneService.Data.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -6,7 +7,9 @@ using System.Security.Claims;
 
 namespace DroneService.Application.Auth.Queries.GetUserInfo;
 
-public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, LoggedUserModel>
+// Handler → vrací základní informace o aktuálně přihlášeném uživateli
+public class GetUserInfoQueryHandler
+    : IRequestHandler<GetUserInfoQuery, Result<LoggedUserModel>>
 {
     private readonly UserManager<AppUser> _userManager;
 
@@ -15,18 +18,42 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, LoggedU
         _userManager = userManager;
     }
 
-    public async Task<LoggedUserModel> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
+    public async Task<Result<LoggedUserModel>> Handle(
+        GetUserInfoQuery request,
+        CancellationToken cancellationToken)
     {
+        // =========================================
+        // 1. ZÍSKÁNÍ USER ID Z CLAIMS
+        // =========================================
+        // ClaimTypes.NameIdentifier obsahuje ID uživatele z JWT tokenu
         var userId = request.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        // =========================================
+        // 2. NAČTENÍ UŽIVATELE Z DB
+        // =========================================
         var user = await _userManager.FindByIdAsync(userId);
 
-        if (user == null) throw new Exception("USER_NOT_FOUND");
+        // Pokud uživatel neexistuje → vrátíme chybu
+        if (user == null)
+            return Result<LoggedUserModel>.Fail("USER_NOT_FOUND");
 
-        return new LoggedUserModel
+        // =========================================
+        // 3. VYTVOŘENÍ DTO
+        // =========================================
+        var model = new LoggedUserModel
         {
             id = user.Id,
+
+            // víme, že user existuje → je přihlášený
             isAuthenticated = true,
+
+            // zatím natvrdo false (role se neřeší)
             isAdmin = false,
         };
+
+        // =========================================
+        // 4. RETURN
+        // =========================================
+        return Result<LoggedUserModel>.Ok(model);
     }
 }

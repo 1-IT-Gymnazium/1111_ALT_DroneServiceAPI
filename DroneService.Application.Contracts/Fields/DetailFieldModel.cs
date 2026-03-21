@@ -9,7 +9,9 @@ public class DetailFieldModel
     public string Name { get; set; } = null!;
     public double Area { get; set; }
     public string CurrentCrops { get; set; } = null!;
-    public int ArcGisId { get; set; }
+    public int LpisId { get; set; }
+    public int FID { get; set; }
+    public int dDpb { get; set; }
     public string AtticBlock { get; set; } = null!;
     public string BlockType { get; set; } = null!;
     public string Municipality { get; set; } = null!;
@@ -26,6 +28,9 @@ public static class DetailFieldModelExtensions
             Name = source.Name,
             Area = source.Area,
             CurrentCrops = source.CurrentCrops,
+            LpisId = source.LpisId,
+            FID = source.FID,
+            dDpb = source.dDpb,
             AtticBlock = source.AtticBlock,
             BlockType = source.BlockType,
             Municipality = source.Municipality,

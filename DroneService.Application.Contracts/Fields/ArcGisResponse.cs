@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DroneService.Application.Contracts.Fields;
+﻿namespace DroneService.Application.Contracts.Fields;
 
 public class ArcGisResponse
 {
@@ -22,5 +16,8 @@ public class ArcGisAttributes
     public string? ZKOD_DPB { get; set; }
     public string? KULTURANAZ { get; set; }
     public string? PRISL_OPZL { get; set; }
+    public string? ID_UZ {  get; set; }
+    public string? FID { get; set; }
+    public string? ID_DPB { get; set; }
 }
 

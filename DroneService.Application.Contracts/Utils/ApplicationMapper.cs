@@ -1,15 +1,6 @@
 ﻿using DroneService.Application.Contracts.Auth;
-using DroneService.Data;
 using DroneService.Data.Entities.Identity;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using NodaTime;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DroneService.Application.Contracts.Utils;
 

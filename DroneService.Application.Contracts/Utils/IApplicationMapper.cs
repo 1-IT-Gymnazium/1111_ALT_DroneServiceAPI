@@ -1,14 +1,15 @@
 ﻿using DroneService.Application.Contracts.Auth;
-using DroneService.Application.Contracts.Fields;
-using DroneService.Application.Contracts.Reservations;
-using DroneService.Data.Entities;
 using DroneService.Data.Entities.Identity;
 using NodaTime;
 
 namespace DroneService.Application.Contracts.Utils;
 
+// Interface pro mapování entit na DTO modely (Application layer)
+// Slouží k oddělení databázových entit od dat vracených ven (např. API)
 public interface IApplicationMapper
 {
-    Instant Now { get; }
+    Instant Now { get; } // aktuální čas (např. pro výpočty nebo mapování)
+
+    // mapování uživatele (AppUser entity) na detailní DTO
     DetailUserModel ToDetailUser(AppUser user);
 }

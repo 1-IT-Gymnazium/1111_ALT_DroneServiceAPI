@@ -1,17 +1,16 @@
-﻿using DroneService.Data.Entities.Identity;
+﻿using DroneService.Application.Contracts.Result;
+using DroneService.Data.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DroneService.Application.Auth.Commands.AssignRoleHandler;
 
-public class AssignRoleToUserCommandHandler : IRequestHandler<AssignRoleToUserCommand, Unit>
+// Handler pro command AssignRoleToUserCommand
+// Vrací Result → vlastní wrapper pro úspěch / chybu
+public class AssignRoleToUserCommandHandler : IRequestHandler<AssignRoleToUserCommand, Result>
 {
+    // UserManager = hlavní nástroj ASP.NET Identity pro práci s uživateli
     private readonly UserManager<AppUser> _userManager;
 
     public AssignRoleToUserCommandHandler(UserManager<AppUser> userManager)
@@ -19,22 +18,29 @@ public class AssignRoleToUserCommandHandler : IRequestHandler<AssignRoleToUserCo
         _userManager = userManager;
     }
 
-    public async Task<Unit> Handle(AssignRoleToUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(AssignRoleToUserCommand request, CancellationToken cancellationToken)
     {
+        // Najdeme uživatele podle ID
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
-        if (user == null)
-            throw new Exception("USER_NOT_FOUND");
 
-        // Smazat předchozí role (volitelné)
+        // Pokud neexistuje → vrátíme chybu
+        if (user == null)
+            return Result.Fail("USER_NOT_FOUND");
+
+        // Načteme všechny claimy uživatele
         var existingClaims = await _userManager.GetClaimsAsync(user);
+
+        // Projdeme všechny role claimy a odstraníme je
+        // → tím zajistíme, že uživatel má vždy jen jednu roli
         foreach (var claim in existingClaims.Where(c => c.Type == ClaimTypes.Role))
         {
             await _userManager.RemoveClaimAsync(user, claim);
         }
 
-        // Přidání nové role
+        // Přidáme novou roli jako claim
         await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, request.RoleName));
-        return Unit.Value;
+
+        // Vracíme úspěch
+        return Result.Ok();
     }
 }
-

@@ -1,13 +1,13 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DroneService.Application.Auth.Commands.Logout;
 
-public class LogoutCommand : IRequest<Unit> 
+// Command → reprezentuje akci "odhlásit uživatele"
+// IRequest<Unit> znamená:
+// → nevrací žádná data (Unit = něco jako void v MediatR)
+public class LogoutCommand : IRequest<Unit>
 {
+    // Refresh token (přijde z cookie)
+    // může být null → proto string?
     public string? RefreshToken { get; set; }
 }

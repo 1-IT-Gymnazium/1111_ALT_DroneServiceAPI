@@ -1,19 +1,15 @@
 ﻿using DroneService.Application.Contracts.Auth;
-using DroneService.Data;
 using DroneService.Data.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DroneService.Application.Auth.Queries.GetAllUsers;
 
-public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, List<AppUserDto>>
+// Query handler → vrací seznam uživatelů pro admina
+public class GetAllUsersQueryHandler
+    : IRequestHandler<GetAllUsersQuery, List<AdminUserListDto>>
 {
     private readonly UserManager<AppUser> _userManager;
 
@@ -22,25 +18,96 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, List<Ap
         _userManager = userManager;
     }
 
-    public async Task<List<AppUserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    public async Task<List<AdminUserListDto>> Handle(
+        GetAllUsersQuery request,
+        CancellationToken cancellationToken)
     {
-        var users = _userManager.Users.ToList();
+        // =========================================
+        // ZÁKLADNÍ QUERY (DB)
+        // =========================================
+        // IQueryable → dotaz se skládá postupně a spustí se až na konci
+        var query = _userManager.Users.AsQueryable();
 
-        var result = await Task.WhenAll(users.Select(async user =>
+        // =========================================
+        // FILTRY (stále DB level → efektivní)
+        // =========================================
+
+        // Hledání podle jména nebo emailu
+        if (!string.IsNullOrWhiteSpace(request.DisplayName))
         {
-            var claims = await _userManager.GetClaimsAsync(user);
-            var role = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            query = query.Where(u =>
+                u.DisplayName!.Contains(request.DisplayName) ||
+                u.Email!.Contains(request.DisplayName));
+        }
 
-            return new AppUserDto
+        // Filtr podle agentury
+        if (!string.IsNullOrWhiteSpace(request.AgencyName))
+        {
+            query = query.Where(u =>
+                u.AgencyName!.Contains(request.AgencyName));
+        }
+
+        // Filtr podle adresy
+        if (!string.IsNullOrWhiteSpace(request.AgencyAddress))
+        {
+            query = query.Where(u =>
+                u.AgencyAddress!.Contains(request.AgencyAddress));
+        }
+
+        // Filtr podle kontaktní osoby
+        if (!string.IsNullOrWhiteSpace(request.ContactPerson))
+        {
+            query = query.Where(u =>
+                u.ContactPerson!.Contains(request.ContactPerson));
+        }
+
+        // =========================================
+        // ŘAZENÍ (pořád DB)
+        // =========================================
+        query = request.Sort == "oldest"
+            ? query.OrderBy(u => u.CreatedAt)
+            : query.OrderByDescending(u => u.CreatedAt);
+
+        // =========================================
+        // SPUŠTĚNÍ DOTAZU (DB → MEMORY)
+        // =========================================
+        var users = await query.ToListAsync(cancellationToken);
+
+        // =========================================
+        // MAPOVÁNÍ + ROLE (už v paměti)
+        // =========================================
+        var result = new List<AdminUserListDto>();
+
+        foreach (var user in users)
+        {
+            // ⚠️ KAŽDÝ USER → EXTRA DOTAZ DO DB
+            var claims = await _userManager.GetClaimsAsync(user);
+
+            // získání role z claims
+            var role = claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.Role)
+                ?.Value ?? "user";
+
+            // =========================================
+            // ROLE FILTER (už v paměti)
+            // =========================================
+            if (!string.IsNullOrWhiteSpace(request.Role) &&
+                role != request.Role)
+                continue;
+
+            // mapování na DTO
+            result.Add(new AdminUserListDto
             {
                 Id = user.Id,
-                Email = user.Email!,
-                Role = role ?? "user"
-            };
-        }));
+                DisplayName = user.DisplayName,
+                AgencyName = user.AgencyName,
+                AgencyAddress = user.AgencyAddress,
+                ContactPerson = user.ContactPerson,
+                Role = role,
+                CreatedAt = user.CreatedAt
+            });
+        }
 
-        return result.ToList();
-
+        return result;
     }
 }
-

@@ -3,6 +3,7 @@ using DroneService.Data.Interfaces;
 using NodaTime;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DroneService.Data.Enums;
 
 namespace DroneService.Data.Entities;
 [Table(nameof(Reservation))]
@@ -10,14 +11,14 @@ namespace DroneService.Data.Entities;
 public class Reservation : ITrackable
 {
     public Guid Id { get; set; }
-    public DateTime ScheduledAt { get; set; }
+    public Instant ScheduledAt { get; set; }
     public string ServiceType { get; set; } = null!;
     public decimal Price { get; set; }
     public bool IsSubscription { get; set; }
+    public ReservationState State { get; set; } = ReservationState.Created;
     public AppUser Author { get; set; } = null!;
     public Guid AuthorId { get; set; }
     public ICollection<Field> Fields { get; set; } = new List<Field>();
-
     #region Trackable
     public Instant CreatedAt { get; set; }
     [MaxLength(Metadata.TrackableByLength)]

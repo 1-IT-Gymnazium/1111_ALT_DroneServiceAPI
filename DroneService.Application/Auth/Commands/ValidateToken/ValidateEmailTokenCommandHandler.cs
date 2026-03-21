@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DroneService.Application.Auth.Commands.ValidateToken;
 
-public class ValidateEmailTokenCommandHandler : IRequestHandler<ValidateEmailTokenCommand, IResult>
+// Handler → ověří email pomocí tokenu
+public class ValidateEmailTokenCommandHandler
+    : IRequestHandler<ValidateEmailTokenCommand, IResult>
 {
     private readonly UserManager<AppUser> _userManager;
 
@@ -17,10 +19,22 @@ public class ValidateEmailTokenCommandHandler : IRequestHandler<ValidateEmailTok
 
     public async Task<IResult> Handle(ValidateEmailTokenCommand request, CancellationToken cancellationToken)
     {
+        // =========================================
+        // 1. NORMALIZACE EMAILU
+        // =========================================
+        // Identity ukládá emaily/username ve velkých písmenech
         var normalizedEmail = request.Email.ToUpperInvariant();
-        var user = await _userManager.Users
-            .SingleOrDefaultAsync(x => !x.EmailConfirmed && x.NormalizedUserName == normalizedEmail, cancellationToken);
 
+        // =========================================
+        // 2. NAJÍT USERA, KTERÝ JEŠTĚ NENÍ POTVRZENÝ
+        // =========================================
+        var user = await _userManager.Users
+            .SingleOrDefaultAsync(
+                x => !x.EmailConfirmed && x.NormalizedUserName == normalizedEmail,
+                cancellationToken
+            );
+
+        // Pokud user neexistuje nebo už je potvrzený → fail
         if (user == null)
         {
             return Results.ValidationProblem(new Dictionary<string, string[]>
@@ -29,7 +43,12 @@ public class ValidateEmailTokenCommandHandler : IRequestHandler<ValidateEmailTok
             });
         }
 
+        // =========================================
+        // 3. OVĚŘENÍ TOKENU
+        // =========================================
         var result = await _userManager.ConfirmEmailAsync(user, request.Token);
+
+        // Token nesedí / expiroval → fail
         if (!result.Succeeded)
         {
             return Results.ValidationProblem(new Dictionary<string, string[]>
@@ -38,7 +57,10 @@ public class ValidateEmailTokenCommandHandler : IRequestHandler<ValidateEmailTok
             });
         }
 
+        // =========================================
+        // 4. HOTOVO ✅
+        // =========================================
+        // EmailConfirmed = true (nastaví Identity interně)
         return Results.NoContent();
     }
 }
-

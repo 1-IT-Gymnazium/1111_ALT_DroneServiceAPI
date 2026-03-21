@@ -14,6 +14,7 @@ public class AppUser : IdentityUser<Guid>, ITrackable
     public string? ContactPerson { get; set; }
     public string? Ico { get; set; }
     public ICollection<ServiceGoal> ServiceGoals { get; set; } = new List<ServiceGoal>();
+    public string? Note { get; set; }
 
     #region Trackable
     public Instant CreatedAt { get; set; }

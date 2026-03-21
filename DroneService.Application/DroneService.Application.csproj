@@ -22,6 +22,7 @@
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="NodaTime" Version="3.2.2" />
+		<PackageReference Include="NodaTime.Serialization.SystemTextJson" Version="1.3.0" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="9.0.4" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
@@ -31,10 +32,6 @@
 	  <ProjectReference Include="..\DroneService.Application.Contracts\DroneService.Application.Contracts.csproj" />
 	  <ProjectReference Include="..\DroneService.Data\DroneService.Data.csproj" />
 	  <ProjectReference Include="..\DroneService.Utilities\DroneService.Utilities.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Reservation\Queries\" />
 	</ItemGroup>
 
 </Project>

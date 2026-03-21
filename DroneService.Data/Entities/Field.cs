@@ -1,4 +1,5 @@
-﻿using DroneService.Data.Entities.Identity;
+﻿
+using DroneService.Data.Entities.Identity;
 using DroneService.Data.Interfaces;
 using NodaTime;
 using System.ComponentModel.DataAnnotations;
@@ -19,7 +20,10 @@ public class Field : ITrackable
     public string AtticBlock { get; set; } = null!;
     public string BlockType { get; set; } = null!;
     public string Municipality { get; set; } = null!;
-
+    public int LpisId { get; set; }
+    public int FID { get; set; }
+    public int dDpb { get; set; }
+    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     public AppUser Author { get; set; } = null!;
     public Guid AuthorId { get; set; }
     

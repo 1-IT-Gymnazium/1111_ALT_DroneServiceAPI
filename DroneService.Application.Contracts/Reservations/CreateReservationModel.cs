@@ -1,14 +1,14 @@
 ﻿using DroneService.Data.Entities;
+using NodaTime;
 using System.ComponentModel.DataAnnotations;
 
 namespace DroneService.Application.Contracts.Reservations;
 
 public class CreateReservationModel
 {
-    [Required(AllowEmptyStrings = false, ErrorMessage = "Příspěvek musí mít nějaký text!")]
-    [MaxLength(Metadata.ContentLenght)]
-    public DateTime ScheduledAt { get; set; }
-    public string Location { get; set; } = null!;
-    public string ServiceType { get; set; } = null!;
-    public string Note { get; set; } = null!;
+    [Required]
+    public Instant ScheduledAt { get; set; }
+    [Required]
+    [MinLength(1)]
+    public List<Guid> FieldIds { get; set; } = null!;
 }

@@ -1,15 +1,30 @@
 ﻿using DroneService.Application.Contracts.Auth;
-using DroneService.Application.Contracts.Utils;
-using DroneService.Data.Entities.Identity;
+using DroneService.Application.Contracts.Result;
 using MediatR;
 
 namespace DroneService.Application.Auth.Commands.Register;
 
-public class FormCommand : IRequest<DetailUserModel>
+// Command → reprezentuje vyplnění / aktualizaci profilu uživatele
+// IRequest<Result<DetailUserModel>>:
+// → handler vrátí aktualizovaného uživatele (DTO)
+public class FormCommand : IRequest<Result<DetailUserModel>>
 {
-    public string AgencyName { get; set; } = string.Empty;
-    public string ContactPerson { get; set; } = string.Empty;
-    public string AgencyAddress { get; set; } = string.Empty;
-    public string Ico { get; set; } = string.Empty;
+    // Název agentury (firma uživatele)
+    public string AgencyName { get; set; } = null!;
+
+    // Kontaktní osoba (jméno)
+    public string ContactPerson { get; set; } = null!;
+
+    // Adresa agentury
+    public string AgencyAddress { get; set; } = null!;
+
+    // IČO (identifikační číslo firmy)
+    public string Ico { get; set; } = null!;
+
+    // Seznam "cílů služeb" (např. typy práce, které uživatel dělá)
+    // inicializováno na prázdný list → zabrání null reference
     public List<string> ServiceGoals { get; set; } = new();
+
+    // Poznámka (volitelné info)
+    public string Note { get; set; } = null!;
 }

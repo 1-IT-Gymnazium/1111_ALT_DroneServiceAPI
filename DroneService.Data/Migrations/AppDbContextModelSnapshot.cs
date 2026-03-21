@@ -103,6 +103,12 @@ namespace DroneService.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<int>("FID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LpisId")
+                        .HasColumnType("integer");
+
                     b.Property<Instant>("ModifiedAt")
                         .HasMaxLength(200)
                         .HasColumnType("timestamp with time zone");
@@ -120,14 +126,12 @@ namespace DroneService.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<Guid?>("ReservationId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("dDpb")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("ReservationId");
 
                     b.ToTable("Field");
                 });
@@ -200,6 +204,9 @@ namespace DroneService.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("NormalizedUserName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Note")
                         .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
@@ -314,12 +321,15 @@ namespace DroneService.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime>("ScheduledAt")
+                    b.Property<Instant>("ScheduledAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ServiceType")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -378,6 +388,21 @@ namespace DroneService.Data.Migrations
                     b.ToTable("ServiceType");
                 });
 
+            modelBuilder.Entity("FieldReservation", b =>
+                {
+                    b.Property<Guid>("FieldsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ReservationsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("FieldsId", "ReservationsId");
+
+                    b.HasIndex("ReservationsId");
+
+                    b.ToTable("FieldReservation");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
@@ -407,10 +432,6 @@ namespace DroneService.Data.Migrations
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DroneService.Data.Entities.Reservation", null)
-                        .WithMany("Fields")
-                        .HasForeignKey("ReservationId");
 
                     b.Navigation("Author");
                 });
@@ -448,16 +469,26 @@ namespace DroneService.Data.Migrations
                     b.Navigation("Author");
                 });
 
+            modelBuilder.Entity("FieldReservation", b =>
+                {
+                    b.HasOne("DroneService.Data.Entities.Field", null)
+                        .WithMany()
+                        .HasForeignKey("FieldsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DroneService.Data.Entities.Reservation", null)
+                        .WithMany()
+                        .HasForeignKey("ReservationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DroneService.Data.Entities.Identity.AppUser", b =>
                 {
                     b.Navigation("Fields");
 
                     b.Navigation("ServiceGoals");
-                });
-
-            modelBuilder.Entity("DroneService.Data.Entities.Reservation", b =>
-                {
-                    b.Navigation("Fields");
                 });
 #pragma warning restore 612, 618
         }
