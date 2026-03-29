@@ -8,12 +8,12 @@ using System.Security.Claims;
 namespace DroneService.Application.Auth.Queries.GetAllUsers;
 
 // Query handler → vrací seznam uživatelů pro admina
-public class GetAllUsersQueryHandler
+public class GetAllUsersHandler
     : IRequestHandler<GetAllUsersQuery, List<AdminUserListDto>>
 {
     private readonly UserManager<AppUser> _userManager;
 
-    public GetAllUsersQueryHandler(UserManager<AppUser> userManager)
+    public GetAllUsersHandler(UserManager<AppUser> userManager)
     {
         _userManager = userManager;
     }
@@ -26,7 +26,9 @@ public class GetAllUsersQueryHandler
         // ZÁKLADNÍ QUERY (DB)
         // =========================================
         // IQueryable → dotaz se skládá postupně a spustí se až na konci
-        var query = _userManager.Users.AsQueryable();
+        var query = _userManager.Users
+            .Include(u => u.ServiceGoals)
+            .AsQueryable();
 
         // =========================================
         // FILTRY (stále DB level → efektivní)
@@ -104,7 +106,8 @@ public class GetAllUsersQueryHandler
                 AgencyAddress = user.AgencyAddress,
                 ContactPerson = user.ContactPerson,
                 Role = role,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
+                ServiceGoals = user.ServiceGoals?.Select(g => g.Goal).ToList() ?? new List<string>()
             });
         }
 

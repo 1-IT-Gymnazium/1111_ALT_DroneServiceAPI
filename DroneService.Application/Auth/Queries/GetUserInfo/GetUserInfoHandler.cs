@@ -8,12 +8,12 @@ using System.Security.Claims;
 namespace DroneService.Application.Auth.Queries.GetUserInfo;
 
 // Handler → vrací základní informace o aktuálně přihlášeném uživateli
-public class GetUserInfoQueryHandler
+public class GetUserInfoHandler
     : IRequestHandler<GetUserInfoQuery, Result<LoggedUserModel>>
 {
     private readonly UserManager<AppUser> _userManager;
 
-    public GetUserInfoQueryHandler(UserManager<AppUser> userManager)
+    public GetUserInfoHandler(UserManager<AppUser> userManager)
     {
         _userManager = userManager;
     }

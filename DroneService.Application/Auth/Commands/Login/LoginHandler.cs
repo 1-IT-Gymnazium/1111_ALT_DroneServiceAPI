@@ -11,14 +11,14 @@ using Microsoft.Extensions.Options;
 namespace DroneService.Application.Auth.Commands.Login;
 
 // Handler pro login → vrací Result<LoginResponse>
-public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginResponse>>
+public class LoginHandler : IRequestHandler<LoginCommand, Result<LoginResponse>>
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
     private readonly JwtSetting _jwtSettings;
     private readonly TokenService _tokenService;
 
-    public LoginCommandHandler(
+    public LoginHandler(
         UserManager<AppUser> userManager,
         SignInManager<AppUser> signInManager,
         IOptions<JwtSetting> jwtSettings,

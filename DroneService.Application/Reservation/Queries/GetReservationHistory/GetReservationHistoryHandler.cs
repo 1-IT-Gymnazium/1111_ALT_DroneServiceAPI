@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 namespace DroneService.Application.Reservation.Queries.GetReservationHistory;
 
 // Handler pro získání historických rezervací (tj. těch, které už proběhly)
-public class GetReservationHistoryQueryHandler
+public class GetReservationHistoryHandler
     : IRequestHandler<GetReservationHistoryQuery, List<ReservationDto>>
 {
     private readonly AppDbContext _dbContext;
 
     // DbContext → přístup k databázi
-    public GetReservationHistoryQueryHandler(AppDbContext dbContext)
+    public GetReservationHistoryHandler(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }

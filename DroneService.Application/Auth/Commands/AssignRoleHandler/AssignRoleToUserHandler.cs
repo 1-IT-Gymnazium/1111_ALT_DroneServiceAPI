@@ -8,12 +8,12 @@ namespace DroneService.Application.Auth.Commands.AssignRoleHandler;
 
 // Handler pro command AssignRoleToUserCommand
 // Vrací Result → vlastní wrapper pro úspěch / chybu
-public class AssignRoleToUserCommandHandler : IRequestHandler<AssignRoleToUserCommand, Result>
+public class AssignRoleToUserHandler : IRequestHandler<AssignRoleToUserCommand, Result>
 {
     // UserManager = hlavní nástroj ASP.NET Identity pro práci s uživateli
     private readonly UserManager<AppUser> _userManager;
 
-    public AssignRoleToUserCommandHandler(UserManager<AppUser> userManager)
+    public AssignRoleToUserHandler(UserManager<AppUser> userManager)
     {
         _userManager = userManager;
     }

@@ -15,7 +15,7 @@ namespace DroneService.Application.Auth.Commands.Register;
 
 // Handler → doplnění profilu uživatele po registraci
 // (např. agentura, kontaktní osoba, cíle služeb atd.)
-public class FormCommandHandler : IRequestHandler<FormCommand, Result<DetailUserModel>>
+public class FormHandler : IRequestHandler<FormCommand, Result<DetailUserModel>>
 {
     private readonly AppDbContext _dbContext;
     private readonly IClock _clock;
@@ -23,7 +23,7 @@ public class FormCommandHandler : IRequestHandler<FormCommand, Result<DetailUser
     private readonly UserManager<AppUser> _userManager;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public FormCommandHandler(
+    public FormHandler(
         AppDbContext dbContext,
         IClock clock,
         IApplicationMapper mapper,

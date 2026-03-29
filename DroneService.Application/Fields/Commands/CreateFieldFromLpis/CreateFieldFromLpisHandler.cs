@@ -48,6 +48,7 @@ public class CreateFieldFromLpisHandler : IRequestHandler<CreateFieldFromLpisCom
         // Pokud nic nepřišlo → fail
         if (fieldsFromLpis == null || fieldsFromLpis.Count == 0)
         {
+        // Spadne to tady 
             throw new InvalidOperationException(
                 $"Žádné pole pro LPIS_ID {request.LpisId} nenalezeno.");
         }
@@ -72,10 +73,11 @@ public class CreateFieldFromLpisHandler : IRequestHandler<CreateFieldFromLpisCom
             {
                 Id = Guid.NewGuid(),
 
-                // generovaný název
+                // generovaný název (pole 1,2,3...)
                 Name = $"Pole {existingCount + index}",
 
                 // default hodnoty
+                // to může měnit uživatel v dalších krocích 
                 CurrentCrops = string.Empty,
 
                 // data z LPIS
@@ -87,7 +89,7 @@ public class CreateFieldFromLpisHandler : IRequestHandler<CreateFieldFromLpisCom
                 dDpb = dto.dDpb,
                 Municipality = dto.Municipality,
 
-                // vlastník
+                // vlastník - uživatel
                 AuthorId = request.AuthorId,
 
                 // audit

@@ -9,13 +9,13 @@ namespace DroneService.Application.Reservation.Queries.GetReservationByDateRange
 
 // Handler pro získání rezervací v určitém časovém rozsahu
 // Typicky používaný např. pro kalendář (např. "rezervace na příštích X dní")
-public class GetReservationByDateRangeQueryHandler
+public class GetReservationByDateRangeHandler
     : IRequestHandler<GetReservationsByDateRangeQuery, List<DetailReservationModel>>
 {
     private readonly AppDbContext _dbContext;
     private readonly IApplicationMapper _mapper;
 
-    public GetReservationByDateRangeQueryHandler(
+    public GetReservationByDateRangeHandler(
         AppDbContext dbContext,
         IApplicationMapper mapper)
     {

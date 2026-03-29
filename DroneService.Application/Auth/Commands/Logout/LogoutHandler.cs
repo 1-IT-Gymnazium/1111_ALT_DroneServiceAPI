@@ -6,14 +6,14 @@ using NodaTime;
 namespace DroneService.Application.Auth.Commands.Logout;
 
 // Handler pro logout → nevrací žádná data (Unit = void)
-public class LogoutCommandHandler : IRequestHandler<LogoutCommand, Unit>
+public class LogoutHandler : IRequestHandler<LogoutCommand, Unit>
 {
     private readonly AppDbContext _dbContext;
 
     // IClock (NodaTime) → lepší než DateTime.Now (testovatelný čas)
     private readonly IClock _clock;
 
-    public LogoutCommandHandler(AppDbContext dbContext, IClock clock)
+    public LogoutHandler(AppDbContext dbContext, IClock clock)
     {
         _dbContext = dbContext;
         _clock = clock;

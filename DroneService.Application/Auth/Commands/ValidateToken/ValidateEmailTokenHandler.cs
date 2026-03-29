@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 namespace DroneService.Application.Auth.Commands.ValidateToken;
 
 // Handler → ověří email pomocí tokenu
-public class ValidateEmailTokenCommandHandler
+public class ValidateEmailTokenHandler
     : IRequestHandler<ValidateEmailTokenCommand, IResult>
 {
     private readonly UserManager<AppUser> _userManager;
 
-    public ValidateEmailTokenCommandHandler(UserManager<AppUser> userManager)
+    public ValidateEmailTokenHandler(UserManager<AppUser> userManager)
     {
         _userManager = userManager;
     }

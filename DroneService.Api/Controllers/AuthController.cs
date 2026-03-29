@@ -162,7 +162,7 @@ public class AuthController : ControllerBase
             return Unauthorized();
 
         // Query podle userId
-        var result = await _mediator.Send(new GetUserByAgencyName(userId));
+        var result = await _mediator.Send(new GetUserByAgencyNameQuery(userId));
 
         if (result == null)
             return NotFound();

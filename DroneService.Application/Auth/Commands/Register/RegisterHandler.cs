@@ -13,14 +13,14 @@ namespace DroneService.Application.Auth.Commands.Register;
 
 // Handler → registrace nového uživatele
 // Vrací Result<string> → string = email confirmation token
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<string>>
+public class RegisterHandler : IRequestHandler<RegisterCommand, Result<string>>
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly IClock _clock;
     private readonly IEmailSenderService _emailSenderService;
     private readonly EnvironmentOptions _envOptions;
 
-    public RegisterCommandHandler(
+    public RegisterHandler(
         UserManager<AppUser> userManager,
         IClock clock,
         IEmailSenderService emailSenderService,

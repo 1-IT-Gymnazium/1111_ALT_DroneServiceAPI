@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 namespace DroneService.Application.Reservation.Queries.GetUserReservation;
 
 // Handler → vrací všechny rezervace konkrétního uživatele
-public class GetUserReservationQueryHandler
+public class GetUserReservationHandler
     : IRequestHandler<GetUserReservationQuery, List<DetailReservationModel>>
 {
     private readonly AppDbContext _dbContext;
     private readonly IApplicationMapper _mapper;
 
-    public GetUserReservationQueryHandler(
+    public GetUserReservationHandler(
         AppDbContext dbContext,
         IApplicationMapper mapper)
     {

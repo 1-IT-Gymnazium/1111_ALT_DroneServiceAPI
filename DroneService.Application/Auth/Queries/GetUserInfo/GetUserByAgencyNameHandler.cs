@@ -8,7 +8,7 @@ namespace DroneService.Application.Auth.Queries.GetUserInfo;
 
 // Handler → vrací základní informace o uživateli podle jeho ID
 public class GetUserByAgencyNameHandler
-    : IRequestHandler<GetUserByAgencyName, UserInfo?>
+    : IRequestHandler<GetUserByAgencyNameQuery, UserInfo?>
 {
     private readonly UserManager<AppUser> _userManager;
 
@@ -18,7 +18,7 @@ public class GetUserByAgencyNameHandler
     }
 
     public async Task<UserInfo?> Handle(
-        GetUserByAgencyName request,
+        GetUserByAgencyNameQuery request,
         CancellationToken cancellationToken)
     {
         // =========================================

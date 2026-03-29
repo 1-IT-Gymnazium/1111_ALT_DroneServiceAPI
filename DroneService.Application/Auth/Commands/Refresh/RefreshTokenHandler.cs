@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace DroneService.Application.Auth.Commands.Refresh;
 
 // Handler → obnoví access token pomocí refresh tokenu
-public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, LoginResponse>
+public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, LoginResponse>
 {
     private readonly AppDbContext _dbContext;
     private readonly TokenService _tokenService;
@@ -19,7 +19,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, L
     // Používáš HttpContext → nastavuješ cookie přímo v handleru
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public RefreshTokenCommandHandler(
+    public RefreshTokenHandler(
         AppDbContext dbContext,
         TokenService tokenService,
         IClock clock,
