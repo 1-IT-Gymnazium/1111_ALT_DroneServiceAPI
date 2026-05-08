@@ -31,20 +31,22 @@ public class EmailSenderBackgroundService : BackgroundService
     // Metoda, která periodicky odesílá emaily
     private async Task SendEmails(CancellationToken stoppingToken)
     {
-        // nekonečný loop dokud není aplikace ukončena
         while (!stoppingToken.IsCancellationRequested)
         {
-            // vytvoření nového DI scope (důležité pro scoped služby, např. DbContext)
-            using var scope = _provider.CreateScope();
+            try
+            {
+                using var scope = _provider.CreateScope();
+                var emailSenderService = scope.ServiceProvider
+                    .GetRequiredService<IEmailSenderService>();
+                await emailSenderService.SendEmailAsync();
+            }
+            catch (Exception ex)
+            {
+                // Chyba při odesílání emailů nezastaví celou aplikaci
+                Console.WriteLine($"EmailSender error: {ex.Message}");
+            }
 
-            // získání služby pro odesílání emailů
-            var emailSenderService = scope.ServiceProvider.GetRequiredService<IEmailSenderService>();
-
-            // samotné odeslání emailů (typicky z DB fronty)
-            await emailSenderService.SendEmailAsync();
-
-            // čekání 5 minut (300 sekund), než se proces zopakuje
-            await Task.Delay(TimeSpan.FromSeconds(300));
+            await Task.Delay(TimeSpan.FromSeconds(300), stoppingToken);
         }
     }
 }
