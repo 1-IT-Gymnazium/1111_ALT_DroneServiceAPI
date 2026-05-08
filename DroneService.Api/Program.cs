@@ -234,7 +234,10 @@ public class Program
         {
             options.AddPolicy("AllowFrontend",
                 policy => policy
-                    .WithOrigins("http://localhost:8080") // Vue frontend
+                    .WithOrigins(
+                        "http://localhost:8080",           // lokální vývoj
+                        "https://agrodrony.vercel.app"     // produkce – doplň skutečnou URL
+                    )
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials());
@@ -264,5 +267,11 @@ public class Program
         app.MapControllers(); // napojení controllerů
 
         app.Run(); // spuštění aplikace
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            db.Database.Migrate();
+        }
     }
 }
