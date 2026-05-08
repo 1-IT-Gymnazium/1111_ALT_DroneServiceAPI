@@ -235,8 +235,8 @@ public class Program
             options.AddPolicy("AllowFrontend",
                 policy => policy
                     .WithOrigins(
-                        "http://localhost:8080",           // lokální vývoj
-                        "https://agrodrony.vercel.app"     // produkce – doplň skutečnou URL
+                        "http://localhost:8080",
+                        "https://1111-alt-drone-service-ui-kxd1.vercel.app"
                     )
                     .AllowAnyHeader()
                     .AllowAnyMethod()
@@ -248,6 +248,13 @@ public class Program
         // =========================================
 
         var app = builder.Build();
+
+        // Migrace při startu
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            db.Database.Migrate();
+        }
 
         // Povolení CORS
         app.UseCors("AllowFrontend");
@@ -267,11 +274,5 @@ public class Program
         app.MapControllers(); // napojení controllerů
 
         app.Run(); // spuštění aplikace
-
-        using (var scope = app.Services.CreateScope())
-        {
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            db.Database.Migrate();
-        }
     }
 }
