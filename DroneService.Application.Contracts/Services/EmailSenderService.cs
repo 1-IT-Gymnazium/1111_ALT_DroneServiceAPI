@@ -111,7 +111,7 @@ public class EmailSenderService : IEmailSenderService
                 using var smtp = new MailKit.Net.Smtp.SmtpClient();
 
                 // připojení na SMTP server
-                await smtp.ConnectAsync(_smtpOptions.Host, _smtpOptions.Port);
+                await smtp.ConnectAsync(_smtpOptions.Host, _smtpOptions.Port, MailKit.Security.SecureSocketOptions.StartTls);
 
                 // autentizace
                 await smtp.AuthenticateAsync(_smtpOptions.Username, _smtpOptions.Password);
